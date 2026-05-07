@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "uptime-monitor.fullname" . }}:{{ .Values.web.service.port }}']
+      args: ['{{ include "uptime-monitor.fullname" . }}:{{ .Values.server.service.port }}']
   restartPolicy: Never

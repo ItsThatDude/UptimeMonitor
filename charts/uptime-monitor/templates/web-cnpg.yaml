@@ -1,0 +1,14 @@
+{{- if and .Values.server.enabled .Values.server.database.cnpg.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "uptime-monitor.fullname" . }}-db
+spec:
+  instances: {{ .Values.server.database.cnpg.instances }}
+  storage:
+    size: {{ .Values.server.database.cnpg.size }}
+  bootstrap:
+    initdb:
+      database: uptime-monitor
+      owner: uptime-monitor
+{{- end }}

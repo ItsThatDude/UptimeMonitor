@@ -1,84 +1,96 @@
-{{- if .Values.monitor.enabled }}
-{{- if and (ne (lower .Values.monitor.deploymentType) "deployment") (ne (lower .Values.monitor.deploymentType) "daemonset") }}
-{{ fail (printf "Unsupported deploymentType '%s' for monitor. Supported types are 'Deployment' and 'DaemonSet'." .Values.monitor.deploymentType) }}
+{{- if .Values.remoteMonitor.enabled }}
+{{- if and (ne (lower .Values.remoteMonitor.deploymentType) "deployment") (ne (lower .Values.remoteMonitor.deploymentType) "daemonset") }}
+{{ fail (printf "Unsupported deploymentType '%s' for monitor. Supported types are 'Deployment' and 'DaemonSet'." .Values.remoteMonitor.deploymentType) }}
 {{- end }}
 apiVersion: apps/v1
-kind: {{ camelcase .Values.monitor.deploymentType }}
+kind: {{ camelcase .Values.remoteMonitor.deploymentType }}
 metadata:
   name: {{ include "uptime-monitor.fullname" . }}-monitor
   labels:
     {{- include "uptime-monitor.labels" . | nindent 4 }}
 spec:
-  {{- if not (eq (lower .Values.monitor.deploymentType) "daemonset") }}
-  replicas: {{ .Values.monitor.replicaCount }}
+  {{- if not (eq (lower .Values.remoteMonitor.deploymentType) "daemonset") }}
+  replicas: {{ .Values.remoteMonitor.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "uptime-monitor.monitor.selectorLabels" . | nindent 6 }}
+      {{- include "uptime-monitor.remoteMonitor.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.monitor.podAnnotations }}
+      {{- with .Values.remoteMonitor.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "uptime-monitor.monitor.labels" . | nindent 8 }}
-        {{- with .Values.monitor.podLabels }}
+        {{- include "uptime-monitor.remoteMonitor.labels" . | nindent 8 }}
+        {{- with .Values.remoteMonitor.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with .Values.monitor.imagePullSecrets }}
+      {{- with .Values.remoteMonitor.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "uptime-monitor.monitor.serviceAccountName" . }}
-      {{- with .Values.monitor.podSecurityContext }}
+      serviceAccountName: {{ include "uptime-monitor.remoteMonitor.serviceAccountName" . }}
+      {{- with .Values.remoteMonitor.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          {{- with .Values.monitor.securityContext }}
+          {{- with .Values.remoteMonitor.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.monitor.image.repository }}:{{ .Values.monitor.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.monitor.image.pullPolicy }}
-          {{- if .Values.monitor.healthcheck.enabled }}
+          image: "{{ .Values.remoteMonitor.image.repository }}:{{ .Values.remoteMonitor.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.remoteMonitor.image.pullPolicy }}
+          env:
+            - name: Auth__WorkerId
+            {{- if .Values.remoteMonitor.workerIdFromNodeName }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            {{- else }}
+              value: {{ .Values.remoteMonitor.workerId | required "remote monitor worker id is required"}}
+            {{- end }}
+            - name: Auth__Location
+              value: {{ .Values.remoteMonitor.location }}
+            - name: Auth__ApiBaseUrl
+              value: {{ .Values.remoteMonitor.apiBaseUrl | default (printf "http://%s.svc:80" (include "uptime-monitor.fullname" .))}}
+            - name: Auth__Secret
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.remoteMonitor.authSecretName | required "remote monitor auth secret is required" }}
+                  key: {{ .Values.remoteMonitor.authSecretKey }}
+            - name: Logging__LogLevel__Default
+              value: Warning
+          {{- if .Values.remoteMonitor.healthcheck.enabled }}
           ports:
             - name: health
-              containerPort: {{ .Values.monitor.healthcheck.port }}
+              containerPort: {{ .Values.remoteMonitor.healthcheck.port }}
               protocol: TCP
-          {{- with .Values.monitor.healthcheck.livenessProbe }}
+          {{- with .Values.remoteMonitor.healthcheck.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.monitor.healthcheck.readinessProbe }}
+          {{- with .Values.remoteMonitor.healthcheck.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- end }}
-          {{- with .Values.monitor.resources }}
+          {{- with .Values.remoteMonitor.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.monitor.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.monitor.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.monitor.nodeSelector }}
+      {{- with .Values.remoteMonitor.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.monitor.affinity }}
+      {{- with .Values.remoteMonitor.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.monitor.tolerations }}
+      {{- with .Values.remoteMonitor.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

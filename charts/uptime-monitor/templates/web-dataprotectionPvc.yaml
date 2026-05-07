@@ -1,0 +1,12 @@
+{{- if .Values.server.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "uptime-monitor.fullname" . }}-dpkeys
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Mi
+{{- end }}

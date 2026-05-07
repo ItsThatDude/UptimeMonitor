@@ -1,21 +1,21 @@
-{{- if .Values.web.ingress.enabled -}}
+{{- if and .Values.server.enabled .Values.server.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "uptime-monitor.fullname" . }}
   labels:
     {{- include "uptime-monitor.labels" . | nindent 4 }}
-  {{- with .Values.web.ingress.annotations }}
+  {{- with .Values.server.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- with .Values.web.ingress.className }}
+  {{- with .Values.server.ingress.className }}
   ingressClassName: {{ . }}
   {{- end }}
-  {{- if .Values.web.ingress.tls }}
+  {{- if .Values.server.ingress.tls }}
   tls:
-    {{- range .Values.web.ingress.tls }}
+    {{- range .Values.server.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -24,7 +24,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.web.ingress.hosts }}
+    {{- range .Values.server.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -37,7 +37,7 @@ spec:
               service:
                 name: {{ include "uptime-monitor.fullname" $ }}
                 port:
-                  number: {{ $.Values.web.service.port }}
+                  number: {{ $.Values.server.service.port }}
           {{- end }}
     {{- end }}
 {{- end }}

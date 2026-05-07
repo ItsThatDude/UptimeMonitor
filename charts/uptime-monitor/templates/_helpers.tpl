@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "uptime-monitor.name" -}}
-{{- default .Chart.Name .Values.web.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -42,12 +42,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
-{{- define "uptime-monitor.web.labels" -}}
+{{- define "uptime-monitor.server.labels" -}}
 {{ include "uptime-monitor.labels" . }}
-app.kubernetes.io/component: web
+app.kubernetes.io/component: server
 {{- end }}
 
-{{- define "uptime-monitor.monitor.labels" -}}
+{{- define "uptime-monitor.remoteMonitor.labels" -}}
 {{ include "uptime-monitor.labels" . }}
 app.kubernetes.io/component: monitor
 {{- end }}
@@ -60,34 +60,34 @@ app.kubernetes.io/name: {{ include "uptime-monitor.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{- define "uptime-monitor.web.selectorLabels" -}}
+{{- define "uptime-monitor.server.selectorLabels" -}}
 {{ include "uptime-monitor.common.selectorLabels" . }}
-app.kubernetes.io/component: web
+app.kubernetes.io/component: server
 {{- end }}
 
-{{- define "uptime-monitor.monitor.selectorLabels" -}}
+{{- define "uptime-monitor.remoteMonitor.selectorLabels" -}}
 {{ include "uptime-monitor.common.selectorLabels" . }}
 app.kubernetes.io/component: monitor
 {{- end }}
 
 {{/*
-Create the name of the service account to use for the web pods
+Create the name of the service account to use for the server pods
 */}}
-{{- define "uptime-monitor.web.serviceAccountName" -}}
-{{- if .Values.web.serviceAccount.create }}
-{{- default (printf "%s-web" (include "uptime-monitor.fullname" .)) .Values.web.serviceAccount.name }}
+{{- define "uptime-monitor.server.serviceAccountName" -}}
+{{- if .Values.server.serviceAccount.create }}
+{{- default (printf "%s-server" (include "uptime-monitor.fullname" .)) .Values.server.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.web.serviceAccount.name }}
+{{- default "default" .Values.server.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use for the monitor pods
 */}}
-{{- define "uptime-monitor.monitor.serviceAccountName" -}}
-{{- if .Values.monitor.serviceAccount.create }}
-{{- default (printf "%s-monitor" (include "uptime-monitor.fullname" .)) .Values.monitor.serviceAccount.name }}
+{{- define "uptime-monitor.remoteMonitor.serviceAccountName" -}}
+{{- if .Values.remoteMonitor.serviceAccount.create }}
+{{- default (printf "%s-monitor" (include "uptime-monitor.fullname" .)) .Values.remoteMonitor.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.monitor.serviceAccount.name }}
+{{- default "default" .Values.remoteMonitor.serviceAccount.name }}
 {{- end }}
 {{- end }}

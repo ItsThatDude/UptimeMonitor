@@ -32,6 +32,7 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("Starting monitoring background service");
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _workerService = scope.ServiceProvider.GetRequiredService<IWorkerService>();
