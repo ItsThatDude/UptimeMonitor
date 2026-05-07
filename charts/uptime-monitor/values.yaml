@@ -149,11 +149,11 @@ server:
   # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:
     httpGet:
-      path: /
+      path: /healthz
       port: http
   readinessProbe:
     httpGet:
-      path: /
+      path: /healthz
       port: http
 
   # Additional volumes on the output Deployment definition.
@@ -251,16 +251,15 @@ remoteMonitor:
 
   healthcheck:
     enabled: true
-    port: 8080
 
     # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
     livenessProbe:
       httpGet:
-        path: /
+        path: /healthz
         port: health
     readinessProbe:
       httpGet:
-        path: /
+        path: /healthz
         port: health
 
   nodeSelector: {}

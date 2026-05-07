@@ -67,7 +67,7 @@ spec:
           {{- if .Values.remoteMonitor.healthcheck.enabled }}
           ports:
             - name: health
-              containerPort: {{ .Values.remoteMonitor.healthcheck.port }}
+              containerPort: 8080
               protocol: TCP
           {{- with .Values.remoteMonitor.healthcheck.livenessProbe }}
           livenessProbe:
