@@ -1,0 +1,100 @@
+@use 'bootstrap/scss/bootstrap' as bs;
+@use 'bootstrap-icons/font/bootstrap-icons';
+
+.form-control.ng-invalid,
+.form-select.ng-invalid {
+    @extend .border-danger;
+}
+
+.table.table-action>tbody>tr {
+    cursor: pointer;
+}
+
+.input-group-text.drag-handle {
+    padding-left: 4px;
+}
+
+.drag-handle > .dndGripper {
+    margin-right: 4px;
+}
+
+.dndPlaceholder {
+    height: 16px;
+    background: white;
+    opacity: 10%;
+    margin-bottom: 5px;
+}
+
+[dndHandle],
+[draggable='true']:not(:has([dndHandle])) {
+    cursor: pointer;
+}
+
+[draggable].dndDraggableDisabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+[dndDropzone].dndDragging {
+    background: rgba(255,255,255, 0.2);
+    border-radius: 5px;
+    min-height: 32px;
+}
+
+[dndDropzone].dndDropzoneDisabled {
+    cursor: no-drop;
+    opacity: 0.7;
+    border-color: gray;
+}
+
+[dndDropzone].dndDragover {
+    border-color: green;
+}
+
+app-status-page {
+    @extend .d-flex, .flex-column, .h-100;
+}
+
+app-status-page .page-title {
+    @extend .h5, .m-0;
+}
+
+app-status-page>header {
+    @extend .d-md-flex, .justify-content-between, .align-items-center, .pb-3, .mb-4, .border-bottom;
+}
+
+app-status-page>header>.page-title {
+    @extend .fw-medium, .fs-4, .mb-3, .mb-md-0;
+}
+
+app-status-page>header>.controls-container {
+    @extend .d-flex, .justify-content-between, .align-items-center;
+}
+
+app-status-page>header>.controls-container>* {
+    @extend .flex-fill;
+}
+
+app-status-page>header>.controls-container>*:not(:last-child) {
+    @extend .pe-1;
+}
+
+app-status-page>header>.controls-container>*>div>.btn {
+    @extend .w-100;
+}
+
+@include bs.media-breakpoint-up(sm) {
+    app-status-page>header>.controls-container>*:first-child {
+        margin: 0 0 0 5px;
+    }
+}
+
+app-status-page>div.page-body {
+    @extend .flex-grow-1;
+}
+
+app-status-page>footer {
+    @extend .text-center;
+
+    color: gray;
+}

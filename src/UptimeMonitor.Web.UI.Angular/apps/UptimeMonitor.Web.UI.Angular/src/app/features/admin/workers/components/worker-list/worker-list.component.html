@@ -1,0 +1,49 @@
+<app-page-header [title]="'Workers'">
+  <toolbar-content>
+    <button type="button" class="btn btn-sm btn-outline-primary" [routerLink]="['create']">
+        <i class="bi-plus-circle me-1"></i> Create
+    </button>
+  </toolbar-content>
+</app-page-header>
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th class="d-none d-md-table-cell">Location</th>
+                <th>Last Check-in</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (worker of workers.records; track worker.id) {
+            <tr>
+                <td>{{ worker.name }}</td>
+                <td class="d-none d-md-table-cell">{{ worker.location }}</td>
+                <td>{{ formatCheckIn(worker.lastCheckIn) }}</td>
+                <td class="text-end">
+                    <div ngbDropdown class="d-inline-block">
+                        <button type="button" class="btn btn-sm btn-outline-primary" [id]="'actions-' + worker.id"
+                            ngbDropdownToggle>
+                            Actions
+                        </button>
+                        <div ngbDropdownMenu [attr.aria-labelledby]="'actions-' + worker.id">
+                            <button ngbDropdownItem [routerLink]="['edit', worker.id]">
+                                <i class="bi-pencil-square me-1"></i> Edit
+                            </button>
+                            <button ngbDropdownItem (click)="deleteWorker(worker.id)">
+                                <i class="bi-trash me-1"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            } @empty {
+            <tr>
+                <td colspan="100%" style="text-align: center;">There are no workers configured.</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<lib-paginator [pageCount]="workers.totalPages" [pageSize]="pageSize" [currentPage]="page" (pageChanged)="pageChanged($event)"></lib-paginator>

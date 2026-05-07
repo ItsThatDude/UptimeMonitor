@@ -1,0 +1,19 @@
+.heartbeat {
+    background-color: gray;
+    border-radius: 3px;
+    height: 18px;
+    width: 5px;
+    margin: 1px;
+    transition: transform .2s;
+}
+.heartbeat:hover {
+    transform: scale(1.5);
+}
+
+.heartbeat.up {
+    background-color: var(--bs-success);
+}
+
+.heartbeat.down {
+    background-color: var(--bs-danger);
+}

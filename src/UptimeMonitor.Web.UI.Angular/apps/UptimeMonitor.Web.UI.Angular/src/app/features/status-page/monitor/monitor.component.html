@@ -1,0 +1,22 @@
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center my-1 p-1">
+    <div class="d-flex align-items-center justify-content-between justify-content-md-left">
+        <div>{{ monitor.name }}</div>
+        <div *ngIf="stats">
+            <span class="badge rounded-pill bg-primary ms-2" style="font-size: 10px"
+                title="Uptime percentage">
+                {{ stats.uptimePercent }}%
+            </span>
+            <span class="badge rounded-pill bg-secondary ms-2" style="font-size: 10px"
+                title="Average response time">
+                {{ stats.responseTime }}ms
+            </span>
+        </div>
+    </div>
+    <div>
+        <app-heartbeat-list *ngIf="monitor.id" [heartbeats]="heartbeats"></app-heartbeat-list>
+        <div *ngIf="stats" class="d-flex justify-content-between" style="font-size: 10px">
+            <div>now</div>
+            <div>{{ stats.lastTimestamp.toRelative() }}</div>
+        </div>
+    </div>
+</div>

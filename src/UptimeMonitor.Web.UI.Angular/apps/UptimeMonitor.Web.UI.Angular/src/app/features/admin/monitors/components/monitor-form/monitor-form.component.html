@@ -1,0 +1,114 @@
+<app-page-header [title]="(isEditMode) ? 'Update Monitor' : 'CreateMonitor'"></app-page-header>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" formControlName="name" />
+    </div>
+    <div class="mb-3">
+        <label for="type" class="form-label">Type</label>
+        <select class="form-select" formControlName="type">
+        @for (type of types; track type.key) {
+            <option [ngValue]="type.key">{{type.displayName}}</option>
+        }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="target" class="form-label">
+            Target
+            <i class="bi-question-circle text-info ms-1" title="The IP Address, hostname etc used to monitor the target. For http(s) include the scheme (eg: https://fqdn)"></i>
+        </label>
+        <input type="text" class="form-control" id="target" formControlName="target" placeholder="hostname:port or http(s)://hostname:port" />
+    </div>
+    <div class="mb-3">
+        <label for="enabled" class="form-label">Enabled</label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" formControlName="enabled" id="enabled" />
+            <label class="form-check-label" for="enabled">Enabled</label>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="interval" class="form-label">
+            Interval
+            <i class="bi-question-circle text-info ms-1" title="The amount of time in seconds between each check"></i>
+        </label>
+        <div class="col-3">
+            <div class="input-group">
+                <input type="number" class="form-control" id="interval" formControlName="interval" />
+                <span class="input-group-text">Seconds</span>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="timeout" class="form-label">
+            Timeout
+            <i class="bi-question-circle text-info ms-1" title="The amount of time in seconds before the monitored target is considered down"></i>
+        </label>
+        <div class="col-3">
+            <div class="input-group">
+                <input type="number" class="form-control" id="timeout" formControlName="timeout" />
+                <span class="input-group-text">Seconds</span>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="warningThreshold" class="form-label">
+            Warning Latency Threshold
+            <i class="bi-question-circle text-info ms-1" title="The threshold in milliseconds used to indicate a potential issue with the monitored target. Set to 0 to disable."></i>
+        </label>
+        <div class="col-3">
+            <div class="input-group">
+                <input type="number" class="form-control" id="warningThreshold" formControlName="warningThreshold" />
+                <span class="input-group-text">Milliseconds</span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="selectedTypeSettings">
+        <h4>{{ selectedTypeSettings.monitorType }} Settings</h4>
+        <div formArrayName="settings">
+            <div *ngFor="let control of formSettings.controls; let i = index">
+                <div class="mb-3">
+                    <label class="form-label" [for]="'setting-'+i">
+                        {{ selectedTypeSettings.properties[i].displayName }}
+                        @if (selectedTypeSettings.properties[i].description) {
+                            <i class="bi-question-circle text-info ms-1" [title]="selectedTypeSettings.properties[i].description"></i>
+                        }
+                    </label>
+                    @switch(selectedTypeSettings.properties[i].dataType) {
+                        @case ('Int') {
+                            <input class="form-control" type="string"
+                                [formControlName]="i" [id]="'setting-'+i"
+                                placeholder="{{ selectedTypeSettings.properties[i].description }}" />
+                        }
+                        @case ('Boolean') {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                    [formControlName]="i" [id]="'setting-'+i"
+                                    placeholder="{{ selectedTypeSettings.properties[i].description }}" />
+                                <label class="form-check-label" [for]="'setting-'+i">Enabled</label>
+                            </div>
+                        }
+                        @case ('MultilineString') {
+                            <textarea class="form-control" type="text"
+                                [formControlName]="i" [id]="'setting-'+i"
+                                placeholder="{{ selectedTypeSettings.properties[i].description }}"></textarea>
+                        }
+                        @default {
+                            <input class="form-control" type="text"
+                                [formControlName]="i" [id]="'setting-'+i"
+                                placeholder="{{ selectedTypeSettings.properties[i].description }}" />
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi-check-lg me-1"></i>
+            @if (isEditMode) { Update } @else { Create }
+        </button>
+    </div>
+</form>

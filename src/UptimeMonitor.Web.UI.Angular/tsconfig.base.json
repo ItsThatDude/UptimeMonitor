@@ -1,0 +1,24 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@uptime-monitor.web.ui.angular/shared": ["shared/src/index.ts"],
+      "@uptime-monitor.web.ui.angular/shared/admin-api": ["shared/src/lib/admin-api/index.ts"],
+      "@uptime-monitor.web.ui.angular/shared/public-api": ["shared/src/lib/public-api/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

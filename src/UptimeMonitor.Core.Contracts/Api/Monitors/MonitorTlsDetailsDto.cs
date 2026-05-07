@@ -1,0 +1,11 @@
+﻿namespace UptimeMonitor.Core.Contracts.Api.Monitors
+{
+    public class MonitorTlsDetailsDto
+    {
+        public required string Subject { get; set; }
+        public required string Issuer { get; set; }
+
+        public required DateTime NotBefore { get; set; }
+        public required DateTime NotAfter { get; set; }
+    }
+}

@@ -1,0 +1,166 @@
+<div class="row pb-md-1">
+    <div class="col-md-12 col-lg-6 pb-1 pb-lg-0">
+        <div class="card-group">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col fw-bold text-nowrap">Monitors</div>
+                        <div class="col text-end text-nowrap">{{monitorStats?.totalMonitors}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col fw-bold text-nowrap">Up</div>
+                        <div class="col text-end text-nowrap"><i class="bi-cloud-arrow-up-fill text-success me-1"></i>
+                            {{monitorStats?.upMonitors}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col fw-bold text-nowrap">Down</div>
+                        <div class="col text-end text-nowrap"><i class="bi-cloud-arrow-down-fill text-danger me-1"></i>
+                            {{monitorStats?.downMonitors}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-4">
+        <div class="card-group">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col fw-bold text-nowrap">Workers</div>
+                        <div class="col text-end text-nowrap">{{workerStats?.totalWorkers}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col fw-bold text-nowrap">Active</div>
+                        <div class="col text-end text-nowrap">{{workerStats?.activeWorkers}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row py-1">
+    <div class="col-md-5 pb-2 pb-md-0" style="overflow:auto">
+        <div class="card">
+            <h4>Monitors</h4>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-4">Monitor</th>
+                            <th class="col-1">Uptime</th>
+                            <th class="col-7 d-none d-md-table-cell">Response Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(monitor of monitors.records; track monitor.id) {
+                        <tr>
+                            <td>{{monitor.name}}</td>
+                            <td>@if(heartbeats[monitor.id]){<span class="badge rounded-pill bg-primary ms-2"
+                                    style="font-size: 10px">{{heartbeats[monitor.id].uptime}}%</span>}</td>
+                            <td class="d-none d-md-table-cell">
+                                @if(heartbeats[monitor.id]) {
+                                <div class="chart-container" style="display: block">
+                                    <canvas baseChart type="bar" [data]="getChartData(monitor.id)"
+                                        [options]="getChartOptions(monitor.id)"></canvas>
+                                </div>
+                                }
+                            </td>
+                        </tr>
+                        @if(heartbeats[monitor.id]) {
+                        <tr class="d-md-none">
+                            <td colspan="3">
+                                <div class="chart-container" style="display: block">
+                                    <canvas baseChart type="bar" [data]="getChartData(monitor.id)"
+                                        [options]="getChartOptions(monitor.id)"></canvas>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        }
+                    </tbody>
+                </table>
+                <lib-paginator [pageCount]="monitors.totalPages" [pageSize]="monitorsPageSize"
+                    [currentPage]="monitorsPage" (pageChanged)="monitorsPageChanged($event)">
+                </lib-paginator>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card">
+            <h4>Events</h4>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col">Date/Time</th>
+                            <th class="col">Monitor</th>
+                            <th class="col">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (event of monitorEvents.records; track event.id)
+                        {
+                        <tr>
+                            <td>{{formatDateTime(event.timestamp)}}</td>
+                            <td>{{event.monitorName}}</td>
+                            <td>{{event.eventMessage}}</td>
+                        </tr>
+                        }
+                        @empty {
+                        <tr>
+                            <td colspan="3">No events to display.</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                <lib-paginator [pageCount]="monitorEvents.totalPages" [pageSize]="monitorEventsPageSize"
+                    [currentPage]="monitorEventsPage" (pageChanged)="monitorEventsPageChanged($event)">
+                </lib-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row py-1">
+    <div class="col">
+        <div class="card">
+            <h4>Workers</h4>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Worker</th>
+                            <th>Location</th>
+                            <th>Last Check-in</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(worker of workers.records; track worker.id) {
+                        <tr>
+                            <td>{{worker.name}}</td>
+                            <td>{{worker.location}}</td>
+                            <td>{{formatCheckIn(worker.lastCheckIn)}}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                <lib-paginator [pageCount]="workers.totalPages" [pageSize]="workersPageSize"
+                    [currentPage]="workersPage" (pageChanged)="workersPageChanged($event)">
+                </lib-paginator>
+            </div>
+        </div>
+    </div>
+</div>

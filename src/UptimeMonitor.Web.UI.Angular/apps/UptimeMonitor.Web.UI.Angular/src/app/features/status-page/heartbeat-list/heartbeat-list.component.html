@@ -1,0 +1,8 @@
+<div class="d-flex align-items-center justify-content-between">
+    <div *ngFor="let heartbeat of heartbeats; trackBy: trackByTimestamp"
+        class="heartbeat"
+        [class.up]="heartbeat.up === true"
+        [class.down]="heartbeat.up === false"
+        [title]="formatTitle(heartbeat)">
+    </div>
+</div>

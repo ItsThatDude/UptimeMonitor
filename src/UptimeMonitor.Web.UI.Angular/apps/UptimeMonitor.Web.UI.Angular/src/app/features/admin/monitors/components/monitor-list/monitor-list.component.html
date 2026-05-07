@@ -1,0 +1,148 @@
+<app-page-header [title]="'Monitors'">
+  <toolbar-content>
+    <button type="button" class="btn btn-sm btn-outline-primary" [routerLink]="['create']">
+        <i class="bi-plus-circle me-1"></i> Create
+    </button>
+  </toolbar-content>
+</app-page-header>
+<div class="d-flex">
+    <div class="flex-grow-1">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="text-center">Type</th>
+                        <th>Target</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (monitor of monitors.records; track monitor.id) {
+                    <tr>
+                        <td style="cursor:pointer" (click)="selectMonitor(monitor)">
+                            <i class="me-2" [title]="monitor.enabled ? 'Enabled' : 'Disabled'"
+                                [class.text-success]="monitor.enabled" [class.text-secondary]="!monitor.enabled"
+                                [class.bi-check-circle]="monitor.enabled" [class.bi-x-circle]="!monitor.enabled">
+                            </i>
+                            {{ monitor.name }}
+                        </td>
+                        <td class="text-center">{{ monitor.type }}</td>
+                        <td>{{ monitor.target }}</td>
+                        <td class="text-end">
+                            <div ngbDropdown class="d-inline-block">
+                                <button type="button" class="btn btn-sm btn-outline-primary" [id]="'actions-' + monitor.id" ngbDropdownToggle>
+                                    Actions
+                                </button>
+                                <div ngbDropdownMenu [attr.aria-labelledby]="'actions-' + monitor.id">
+                                    <button ngbDropdownItem [routerLink]="['edit', monitor.id]">
+                                        <i class="bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button ngbDropdownItem (click)="deleteMonitor(monitor.id)">
+                                        <i class="bi-trash me-1"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    @if (isHandset() && selectedMonitor && selectedMonitor.id == monitor.id) {
+                    <tr>
+                        <td colspan="4">
+                            <ng-container *ngTemplateOutlet="viewMonitorContent"></ng-container>
+                        </td>
+                    </tr>
+                    }
+                    } @empty {
+                        <tr>
+                            <td colspan="100%" style="text-align: center;">There are no monitors configured.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <lib-paginator [pageCount]="monitors.totalPages" [pageSize]="monitorsPageSize" [currentPage]="monitorsPage" (pageChanged)="monitorsPageChanged($event)"></lib-paginator>
+    </div>
+    @if (!isHandset() && selectedMonitor) {
+    <div class="p-2 border rounded w-50">
+        <ng-container *ngTemplateOutlet="viewMonitorContent"></ng-container>
+    </div>
+    }
+</div>
+<ng-template #viewMonitorContent>
+    @if (selectedMonitor) {
+    <div class="mb-1">
+        <strong>{{ selectedMonitor.name }}</strong>
+    </div>
+    <div class="mb-3">
+        {{ selectedMonitor.type }} &middot; {{ selectedMonitor.target }}
+    </div>
+    <div class="mb-1">
+        <canvas baseChart type="bar" [data]="barChartData" [options]="barChartOptions"></canvas>
+    </div>
+    <div ngbAccordion>
+        @if (selectedMonitor.tlsDetails) {
+            <div ngbAccordionItem>
+                <h2 ngbAccordionHeader>
+                    <button ngbAccordionButton>Certificate Details</button>
+                </h2>
+                <div ngbAccordionCollapse>
+                    <div ngbAccordionBody>
+                        <ng-template>
+                            <div>
+                                <div><strong>Subject</strong></div>
+                                <div>{{selectedMonitor.tlsDetails.subject}}</div>
+                            </div>
+                            <div>
+                                <div><strong>Issuer</strong></div>
+                                <div>{{selectedMonitor.tlsDetails.issuer}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div><strong>Issued</strong></div>
+                                    <div>{{toRelativeDate(selectedMonitor.tlsDetails.notBefore)}} ({{formatDate(selectedMonitor.tlsDetails.notBefore)}})</div>
+                                </div>
+                                <div class="col">
+                                    <div><strong>Expires</strong></div>
+                                    <div>{{toRelativeDate(selectedMonitor.tlsDetails.notAfter)}} ({{formatDate(selectedMonitor.tlsDetails.notAfter)}})</div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        }
+        <div ngbAccordionItem>
+            <h2 ngbAccordionHeader>
+                <button ngbAccordionButton>Monitor Events</button>
+            </h2>
+            <div ngbAccordionCollapse>
+                <div ngbAccordionBody class="px-0">
+                    <ng-template>
+                        <table class="table">
+                            <caption class="px-2">Showing {{ monitorEvents.records.length }} of {{ monitorEvents.totalRecords}} total records.</caption>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (event of monitorEvents.records; track event.id) {
+                                    <tr>
+                                        <td>{{formatDateTime(event.timestamp)}}</td>
+                                        <td>{{event.eventMessage}}</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="px-2">
+                            <lib-paginator [pageCount]="monitorEvents.totalPages" [pageSize]="monitorEventsPageSize" 
+                                [currentPage]="monitorEventsPage" (pageChanged)="monitorEventsPageChanged($event)"></lib-paginator>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</ng-template>

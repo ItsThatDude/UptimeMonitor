@@ -1,0 +1,11 @@
+<div class="p-2">
+    <h4>{{ group.name }}</h4>
+    <div class="px-2">
+        <app-monitor
+            *ngFor="let monitor of group.monitors; trackBy: trackById"
+            [monitor]="monitor"
+            [stats]="getStats(monitor.id)"
+            [heartbeats]="getHeartbeats(monitor.id)">
+        </app-monitor>
+    </div>
+</div>

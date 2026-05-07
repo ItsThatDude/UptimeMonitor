@@ -1,0 +1,413 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "UptimeMonitor Public API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/config": {
+      "get": {
+        "tags": [
+          "Config"
+        ],
+        "operationId": "GetSystemSettings",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicSystemSettingsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicSystemSettingsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicSystemSettingsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/status-page/{slug}": {
+      "get": {
+        "tags": [
+          "StatusPage"
+        ],
+        "operationId": "GetStatusPage",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStatusPageResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStatusPageResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStatusPageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/status-page/{slug}/heartbeats": {
+      "get": {
+        "tags": [
+          "StatusPage"
+        ],
+        "operationId": "GetHeartbeats",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "worker",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "timeRange",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMonitorHeartbeatsResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMonitorHeartbeatsResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMonitorHeartbeatsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/status-page/{slug}/locations": {
+      "get": {
+        "tags": [
+          "StatusPage"
+        ],
+        "operationId": "GetLocations",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/status-page/{slug}/workers": {
+      "get": {
+        "tags": [
+          "StatusPage"
+        ],
+        "operationId": "GetWorkers",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GetMonitorHeartbeatsResponse": {
+        "required": [
+          "heartbeats",
+          "monitorId",
+          "uptime"
+        ],
+        "type": "object",
+        "properties": {
+          "monitorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uptime": {
+            "type": "number",
+            "format": "double"
+          },
+          "heartbeats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HeartbeatDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetStatusPageResponse": {
+        "required": [
+          "monitorGroups",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "monitorGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatusPageMonitorGroupDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "HeartbeatDto": {
+        "required": [
+          "responseTime",
+          "timestamp",
+          "totalHeartbeats",
+          "upHeartbeats"
+        ],
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "responseTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "up": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "totalHeartbeats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "upHeartbeats": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PublicSystemSettingsResponse": {
+        "required": [
+          "defaultStatusPageSlug"
+        ],
+        "type": "object",
+        "properties": {
+          "defaultStatusPageSlug": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StatusPageMonitorDto": {
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StatusPageMonitorGroupDto": {
+        "required": [
+          "id",
+          "monitors",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "monitors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatusPageMonitorDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

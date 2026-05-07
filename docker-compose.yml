@@ -1,0 +1,49 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web.dockerfile
+    environment:
+      - ASPNETCORE_URLS=https://+:8443
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ConnectionStrings__MonitorDbContext=Server=host.docker.internal;Port=5432;User Id=postgres;Password=admin;Database=UptimeMonitor
+      - Logging__LogLevel__Default=Information
+      - Logging__LogLevel__Microsoft.EntityFrameworkCore=Warning
+      - Oidc__Authority=https://oidc-provider.local
+      - Oidc__ClientId=client-id
+      - Oidc__ClientSecret=client-secret
+      - WorkerAuth__Issuer=localhost:8443
+      - WorkerAuth__Audience=localhost:8443
+      - WorkerAuth__Secret=supersecretjwtkey-atleast16characters
+    volumes:
+      - ${USERPROFILE}\.aspnet\https:/https/
+    ports:
+      - "8443:8443"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://localhost:8443/", "--insecure"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+  monitor:
+    build:
+      context: .
+      dockerfile: ./docker/monitor.dockerfile
+    environment:
+      - Logging__LogLevel__Default=Information
+      - Auth__WorkerId=Worker-1
+      - Auth__Location=Docker
+      - Auth__ApiBaseUrl=https://web:8443/api
+      - Auth__Secret=secretkey-to-auth-to-api
+    networks:
+      - app-network
+    depends_on:
+      web:
+        condition: service_healthy
+        restart: true
+networks:
+  app-network:
+    driver: bridge

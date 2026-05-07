@@ -1,0 +1,22 @@
+<div ngbDropdown placement="bottom-end">
+    <button type="button" class="btn btn-outline-primary d-flex justify-content-between align-items-center" ngbDropdownToggle>
+        {{selectedWorker() ?? "All Workers"}}
+    </button>
+    <div ngbDropdownMenu>
+        <div class="px-2">
+            <input type="search" class="form-control" placeholder="Search..." [formControl]="searchInput" />
+        </div>
+        <div class="dropdown-divider"></div>
+        <button ngbDropdownItem [class.active]="selectedWorker() === undefined" (click)="selectWorker.emit(null)" class="d-flex justify-content-between">
+            All Workers
+            <i *ngIf="selectedWorker() === undefined" class="bi-check ms-2"></i>
+        </button>
+        <div class="dropdown-divider" *ngIf="workers().length > 0"></div>
+        @for (worker of workers(); track worker) {
+        <button ngbDropdownItem [class.active]="selectedWorker() === worker" (click)="selectWorker.emit(worker)" class="d-flex justify-content-between">
+            {{ worker }}
+            <i *ngIf="selectedWorker() === worker" class="bi-check ms-2"></i>
+        </button>
+        }
+    </div>
+</div>

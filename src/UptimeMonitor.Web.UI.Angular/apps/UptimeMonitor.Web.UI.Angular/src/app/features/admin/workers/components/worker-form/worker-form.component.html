@@ -1,0 +1,41 @@
+<app-page-header [title]="(isEditMode) ? 'Update Worker' : 'Create Worker'"></app-page-header>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" formControlName="name" />
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Location</label>
+        <input type="text" class="form-control" id="name" formControlName="location" />
+    </div>
+    <div class="mb-3">
+        <label for="secret" class="form-label">Secret</label>
+        <div class="input-group">
+            <input type="password" class="form-control" id="secret" formControlName="secret" placeholder="****************" />
+            <button type="button" class="btn btn-outline-secondary" (click)="generateSecret()">
+                <i class="bi-arrow-clockwise" title="Generate"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="copySecret()"
+                [disabled]="allowSecretCopyToClipboard">
+                <i title="Copy to clipboard" [class.bi-clipboard]="!this.secretCopied"
+                    [class.bi-clipboard-check]="this.secretCopied"></i>
+            </button>
+        </div>
+        @if (!isEditMode) { <div class="form-text">Make sure to copy this before creating the worker.</div> }
+    </div>
+    <div class="mb-3">
+        <label for="configUpdateInterval" class="form-label">Config Update</label>
+        <div class="input-group">
+            <input type="number" class="form-control" id="configUpdateInterval"
+                formControlName="configUpdateInterval" />
+            <span class="input-group-text">Seconds</span>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi-check-lg me-1"></i>
+            @if (isEditMode) { Update } @else { Create }
+        </button>
+    </div>
+</form>

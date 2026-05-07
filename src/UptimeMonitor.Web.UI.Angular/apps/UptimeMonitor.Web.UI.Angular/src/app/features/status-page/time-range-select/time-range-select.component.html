@@ -1,0 +1,14 @@
+<div ngbDropdown placement="bottom-end">
+    <button type="button" class="btn btn-outline-primary d-flex justify-content-between align-items-center" ngbDropdownToggle>
+        {{selectedTimeRange()}}
+    </button>
+    <div ngbDropdownMenu>
+        @for (timeRange of validTimeRanges; track timeRange) {
+        <button ngbDropdownItem [class.active]="selectedTimeRange() === timeRange" (click)="selectTimeRange.emit(timeRange)" 
+            class="d-flex justify-content-between">
+            {{ timeRange }}
+            <i *ngIf="selectedTimeRange() === timeRange" class="bi-check ms-2"></i>
+        </button>
+        }
+    </div>
+</div>

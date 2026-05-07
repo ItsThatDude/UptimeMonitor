@@ -1,0 +1,79 @@
+<app-page-header [title]="(isEditMode) ? 'Update Status Page' : 'Create Status Page'"></app-page-header>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" formControlName="name" />
+    </div>
+    <div class="mb-3">
+        <label for="slug" class="form-label">Slug</label>
+        <input type="text" class="form-control" id="slug" formControlName="slug" />
+    </div>
+
+    <div class="mb-3 d-flex">
+        <div class="flex-grow-1">
+            <h5>Monitor Groups</h5>
+        </div>
+        <div>
+            <button type="button" class="btn btn-sm btn-primary" (click)="addMonitorGroup()">
+                <i class="bi-plus-circle me-1"></i>
+                Add Monitor Group
+            </button>
+        </div>
+    </div>
+
+    <div class="container-fluid mb-3" formArrayName="monitorGroups">
+        <div class="" dndDropzone (dndDrop)="onDropGroup($event)" [dndEffectAllowed]="draggedType === 'group' ? 'move' : 'none'">
+            <div class="dndPlaceholder border rounded-1" dndPlaceholderRef></div>
+            <div class="border rounded p-2 px-0 mb-3" *ngFor="let group of monitorGroups.controls; let groupIndex = index" [formGroupName]="groupIndex"
+                [dndDraggable]="groupIndex" dndEffectAllowed="move" (dndStart)="onDragGroupStart()" (dndEnd)="onDragGroupStop()">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 px-2">
+                        <div class="input-group">
+                            <label class="input-group-text drag-handle px-0 ps-1" [for]="'group-' + groupIndex + '-name'" dndHandle>
+                                <i class="bi-grip-vertical dndGripper fs-5"></i>
+                            </label>
+                            <input class="form-control" formControlName="groupName" placeholder="Group Name" [id]="'group-' + groupIndex + '-name'" />
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <button class="btn btn-sm btn-primary me-2" type="button" (click)="addMonitor(groupIndex)">
+                            <i class="bi-plus-circle me-1"></i> Add Monitor
+                        </button>
+                        <button class="btn btn-sm btn-danger" type="button" (click)="removeMonitorGroup(groupIndex)">
+                            <i class="bi-x-circle me-1"></i> Remove Group
+                        </button>
+                    </div>
+                </div>
+
+                <div class="container-fluid p-1" formArrayName="monitors">
+                    <div class="p-3 pb-1" [class.dndDragging]="this.dragging && this.draggedType === 'monitor'"
+                        dndDropzone (dndDrop)="onDropMonitor($event, groupIndex)" [dndEffectAllowed]="draggedType === 'monitor' ? 'move' : 'none'">
+                        <div class="dndPlaceholder border rounded-1" dndPlaceholderRef></div>
+                        <div *ngFor="let monitor of getMonitors(groupIndex).controls; let monitorIndex = index" [formGroupName]="monitorIndex" class="mb-2"
+                            [dndDraggable]="monitorIndex" dndEffectAllowed="move" (dndStart)="onDragMonitorStart(groupIndex)" (dndEnd)="onDragMonitorEnd()">
+                            <div class="input-group">
+                                <label class="input-group-text drag-handle" [for]="'monitor-'+ groupIndex + '-' + monitorIndex" dndHandle>
+                                    <i class="bi-grip-vertical dndGripper"></i> {{ monitorIndex+1 }}
+                                </label>
+                                <select class="form-select" [id]="'monitor-'+ groupIndex + '-' + monitorIndex" formControlName="monitorId">
+                                    <option [ngValue]="null" disabled>Select a Monitor</option>
+                                    <option *ngFor="let option of getFilteredMonitorOptions(groupIndex, monitorIndex)" [ngValue]="option.id">{{option.name}}</option>
+                                </select>
+                                <button class="btn btn-outline-danger" type="button" (click)="removeMonitor(groupIndex, monitorIndex)" title="Remove Monitor">
+                                    <i class="bi-x-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary" [disabled]="this.form.invalid">
+            <i class="bi-check-lg me-1"></i>
+            @if (isEditMode) { Update } @else { Create }
+        </button>
+    </div>
+</form>

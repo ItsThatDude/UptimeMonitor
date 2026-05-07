@@ -1,0 +1,40 @@
+@if (statusPage) {
+    <header>
+        <div class="d-flex align-items-center justify-content-between w-100 mb-2 mb-md-0">
+            <div class="page-title">
+                {{ statusPage.name }}
+            </div>
+            <app-time-range-select 
+                [selectedTimeRange]="selectedTimeRange"
+                (selectTimeRange)="setTimeRange($event)">
+            </app-time-range-select>
+        </div>
+        <div class="controls-container">
+            <app-location-select 
+                [locations]="locations" 
+                (searchLocation)="searchLocation($event)"
+                [selectedLocation]="selectedLocation" 
+                (selectLocation)="setLocation($event)">
+            </app-location-select>
+            <app-worker-select 
+                [workers]="workers" 
+                (searchWorker)="searchWorker($event)"
+                [selectedWorker]="selectedWorker" 
+                (selectWorker)="setWorker($event)">
+            </app-worker-select>
+        </div>
+    </header>
+    <div class="page-body">
+        <div class="container">
+            <app-monitor-group
+                *ngFor="let group of statusPage.monitorGroups; trackBy: trackById"
+                [group]="group"
+                [getStats]="getStats.bind(this)"
+                [getHeartbeats]="getHeartbeats.bind(this)">
+            </app-monitor-group>
+        </div>
+    </div>
+    <footer>
+        <div>Next update at {{ nextUpdateString() }} (<app-countdown-timer [target]="nextUpdate"></app-countdown-timer>)</div>
+    </footer>
+}

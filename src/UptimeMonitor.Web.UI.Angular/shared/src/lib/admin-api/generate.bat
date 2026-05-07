@@ -1,0 +1,1 @@
+swagger-typescript-api -p %~dp0swagger.json -o %~dp0 -n api-client.service.ts --module-name-index 1

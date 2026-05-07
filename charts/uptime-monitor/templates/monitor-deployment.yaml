@@ -1,0 +1,85 @@
+{{- if .Values.monitor.enabled }}
+{{- if and (ne (lower .Values.monitor.deploymentType) "deployment") (ne (lower .Values.monitor.deploymentType) "daemonset") }}
+{{ fail (printf "Unsupported deploymentType '%s' for monitor. Supported types are 'Deployment' and 'DaemonSet'." .Values.monitor.deploymentType) }}
+{{- end }}
+apiVersion: apps/v1
+kind: {{ camelcase .Values.monitor.deploymentType }}
+metadata:
+  name: {{ include "uptime-monitor.fullname" . }}-monitor
+  labels:
+    {{- include "uptime-monitor.labels" . | nindent 4 }}
+spec:
+  {{- if not (eq (lower .Values.monitor.deploymentType) "daemonset") }}
+  replicas: {{ .Values.monitor.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "uptime-monitor.monitor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.monitor.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "uptime-monitor.monitor.labels" . | nindent 8 }}
+        {{- with .Values.monitor.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.monitor.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "uptime-monitor.monitor.serviceAccountName" . }}
+      {{- with .Values.monitor.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.monitor.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.monitor.image.repository }}:{{ .Values.monitor.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.monitor.image.pullPolicy }}
+          {{- if .Values.monitor.healthcheck.enabled }}
+          ports:
+            - name: health
+              containerPort: {{ .Values.monitor.healthcheck.port }}
+              protocol: TCP
+          {{- with .Values.monitor.healthcheck.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.monitor.healthcheck.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- with .Values.monitor.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.monitor.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.monitor.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.monitor.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.monitor.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.monitor.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

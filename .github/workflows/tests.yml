@@ -1,0 +1,37 @@
+name: Tests
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - "src/**"
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - "src/**"
+
+env:
+  DOTNET_VERSION: '9.0.x'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore
+      run: dotnet restore UptimeMonitor.sln
+
+    - name: Build
+      run: dotnet build UptimeMonitor.sln --configuration Release --no-restore
+
+    - name: Test
+      run: |
+        dotnet test UptimeMonitor.sln --configuration Release --no-build --verbosity normal

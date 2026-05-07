@@ -1,0 +1,108 @@
+{
+  "name": "UptimeMonitor.Web.UI.Angular",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/UptimeMonitor.Web.UI.Angular/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/UptimeMonitor.Web.UI.Angular",
+        "index": "apps/UptimeMonitor.Web.UI.Angular/src/index.html",
+        "browser": "apps/UptimeMonitor.Web.UI.Angular/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/UptimeMonitor.Web.UI.Angular/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/UptimeMonitor.Web.UI.Angular/public"
+          }
+        ],
+        "styles": ["apps/UptimeMonitor.Web.UI.Angular/src/styles.scss"],
+        "scripts": [],
+        "statsJson": true
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "2mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/UptimeMonitor.Web.UI.Angular/src/environments/environment.ts",
+              "with": "apps/UptimeMonitor.Web.UI.Angular/src/environments/environment.prod.ts"
+            }
+          ],
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "apps/UptimeMonitor.Web.UI.Angular/public"
+            },
+            {
+              "glob": "config.json",
+              "input": "apps/UptimeMonitor.Web.UI.Angular/config/prod"
+            }
+          ]
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "apps/UptimeMonitor.Web.UI.Angular/public"
+            },
+            {
+              "glob": "config.json",
+              "input": "apps/UptimeMonitor.Web.UI.Angular/config/dev"
+            }
+          ]
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "UptimeMonitor.Web.UI.Angular:build:production"
+        },
+        "development": {
+          "buildTarget": "UptimeMonitor.Web.UI.Angular:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "UptimeMonitor.Web.UI.Angular:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/UptimeMonitor.Web.UI.Angular/jest.config.ts"
+      }
+    }
+  }
+}
