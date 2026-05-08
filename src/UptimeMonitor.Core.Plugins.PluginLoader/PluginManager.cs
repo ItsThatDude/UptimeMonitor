@@ -27,7 +27,7 @@ namespace UptimeMonitor.Core.Plugins
             PluginsLoaded = true;
         }
 
-        public IEnumerable<MonitorPlugin> GetPlugins(Assembly assembly)
+        public IEnumerable<MonitorPlugin> GetPluginsForAssembly(Assembly assembly)
         {
             var plugins = new List<MonitorPlugin>();
 
@@ -126,7 +126,7 @@ namespace UptimeMonitor.Core.Plugins
                     var context = new PluginLoadContext(dll);
                     var assembly = context.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(dll)));
 
-                    var discoveredPlugins = GetPlugins(assembly);
+                    var discoveredPlugins = GetPluginsForAssembly(assembly);
 
                     // Associate the load context with the discovered plugins so unload can be attempted later
                     foreach (var p in discoveredPlugins)

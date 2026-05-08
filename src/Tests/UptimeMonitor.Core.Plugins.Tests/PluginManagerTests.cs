@@ -14,7 +14,7 @@ namespace UptimeMonitor.Core.Plugins.Tests
             // Use mscorlib/System.Private.CoreLib assembly which won't contain IMonitorType implementations
             var assembly = typeof(object).Assembly;
 
-            var plugins = manager.GetPlugins(assembly);
+            var plugins = manager.GetPluginsForAssembly(assembly);
 
             Assert.Empty(plugins);
         }
