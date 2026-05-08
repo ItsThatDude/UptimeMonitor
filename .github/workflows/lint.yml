@@ -26,7 +26,5 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Run linters
-      uses: wearerequired/lint-action@v2
-      with:
-        dotnet_format: true
+    - name: Dotnet Format
+      run: dotnet format UptimeMonitor.sln --verify-no-changes --verbosity diagnostic
