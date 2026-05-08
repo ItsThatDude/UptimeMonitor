@@ -83,6 +83,10 @@ export class MonitorFormComponent implements OnInit {
         });
     }
 
+    getTypeDisplayName(type: string): string {
+        return this.types.find(t => t.key == type)?.displayName ?? type;
+    }
+
     populateForm(monitor: MonitorConfigurationResponse): void {
         this.form.patchValue({
             name: monitor.name,

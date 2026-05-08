@@ -65,7 +65,7 @@
     </div>
 
     <div *ngIf="selectedTypeSettings">
-        <h4>{{ selectedTypeSettings.monitorType }} Settings</h4>
+        <h4>{{ getTypeDisplayName(selectedTypeSettings.monitorType) }} Settings</h4>
         <div formArrayName="settings">
             <div *ngFor="let control of formSettings.controls; let i = index">
                 <div class="mb-3">
