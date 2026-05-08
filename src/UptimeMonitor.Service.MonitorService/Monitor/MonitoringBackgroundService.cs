@@ -89,6 +89,7 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
                                 if (monitorType == null)
                                 {
                                     _logger.LogError("Monitor Type {typeName} not found", monitorConfig.Type);
+                                    _logger.LogInformation("Monitor types available: {monitorTypes}", string.Join(',', types.Select(t => t.Name)));
                                     continue;
                                 }
 
