@@ -121,6 +121,9 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
                                 instance = new MonitorInstance(_logger, _workerService, monitor, monitorConfig, _configuration);
                                 instance.Run(stoppingToken);
                                 _instances.Add(instance);
+
+                                // Add a slight delay between starting new instances
+                                await Task.Delay(20, stoppingToken);
                             }
                             else
                             {
