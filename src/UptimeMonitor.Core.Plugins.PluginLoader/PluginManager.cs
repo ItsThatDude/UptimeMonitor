@@ -14,13 +14,17 @@ namespace UptimeMonitor.Core.Plugins
 
         public IReadOnlyList<MonitorPlugin> Plugins => _plugins.AsReadOnly();
 
+        public bool PluginsLoaded { get; private set; }
+
         public PluginManager(ILogger<PluginManager> logger) {
             _logger = logger;
         }
 
         public void LoadPlugins()
         {
+            PluginsLoaded = false;
             _plugins = GetPlugins().ToList();
+            PluginsLoaded = true;
         }
 
         public IEnumerable<MonitorPlugin> GetPlugins(Assembly assembly)
@@ -68,13 +72,12 @@ namespace UptimeMonitor.Core.Plugins
 
             foreach (var type in monitorTypes)
             {
-                var settingsType = types.Where(
+                var settingsType = types.FirstOrDefault(
                     t => t.IsClass && !t.IsAbstract && 
                     t.GetInterfaces()
                         .Any(i => i.IsGenericType && 
                                   i.GetGenericTypeDefinition() == typeof(IMonitorSettings<>) && 
-                                  i.GetGenericArguments()[0] == type))
-                    .FirstOrDefault();
+                                  i.GetGenericArguments()[0] == type));
 
                 if(settingsType != null)
                 {

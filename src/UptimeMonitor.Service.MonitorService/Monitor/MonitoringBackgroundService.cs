@@ -61,11 +61,17 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
                     }
                 }
 
+                while(!_pluginManager.PluginsLoaded)
+                {
+                    _logger.LogInformation("Waiting for plugins to be loaded...");
+                    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                }
+
                 try {
                     while (!stoppingToken.IsCancellationRequested)
                     {
                         var types = _pluginManager.GetMonitorTypes();
-
+                        
                         _logger.LogInformation("Fetching worker configuration...");
                         _configuration = await _workerService.GetConfigurationAsync(stoppingToken);
 
