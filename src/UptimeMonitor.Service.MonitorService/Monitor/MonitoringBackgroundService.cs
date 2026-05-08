@@ -62,10 +62,10 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
                 }
 
                 try {
-                    var types = _pluginManager.GetMonitorTypes();
-
                     while (!stoppingToken.IsCancellationRequested)
                     {
+                        var types = _pluginManager.GetMonitorTypes();
+
                         _logger.LogInformation("Fetching worker configuration...");
                         _configuration = await _workerService.GetConfigurationAsync(stoppingToken);
 
@@ -84,8 +84,7 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
                             {
                                 _logger.LogInformation("Creating new instance of Monitor {monitorName} (id: {monitorId})...", monitorConfig.Name, monitorConfig.Id);
 
-                                var monitorType = types.Where(t => t.Name == monitorConfig.Type && t.GetInterfaces().Contains(typeof(IMonitorType)) && !t.IsAbstract && !t.IsInterface)
-                                    .FirstOrDefault();
+                                var monitorType = types.FirstOrDefault(t => t.Name == monitorConfig.Type && t.GetInterfaces().Contains(typeof(IMonitorType)) && !t.IsAbstract && !t.IsInterface);
 
                                 if (monitorType == null)
                                 {
