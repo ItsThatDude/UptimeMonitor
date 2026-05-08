@@ -1,4 +1,4 @@
-[![Tests](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/tests.yml/badge.svg)](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/tests.yml) [![Build](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/docker.yml/badge.svg)](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/docker.yml)
+[![Lint](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/lint.yml/badge.svg)](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/lint.yml) [![Tests](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/tests.yml/badge.svg)](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/tests.yml) [![Build](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/docker.yml/badge.svg)](https://github.com/ItsThatDude/UptimeMonitor/actions/workflows/docker.yml)
 # Uptime Monitor
 
 UptimeMonitor is a modular service monitoring application, powered by .NET Core and Angular
