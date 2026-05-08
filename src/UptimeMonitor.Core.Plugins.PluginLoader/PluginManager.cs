@@ -16,7 +16,8 @@ namespace UptimeMonitor.Core.Plugins
 
         public bool PluginsLoaded { get; private set; }
 
-        public PluginManager(ILogger<PluginManager> logger) {
+        public PluginManager(ILogger<PluginManager> logger)
+        {
             _logger = logger;
         }
 
@@ -73,13 +74,13 @@ namespace UptimeMonitor.Core.Plugins
             foreach (var type in monitorTypes)
             {
                 var settingsType = types.FirstOrDefault(
-                    t => t.IsClass && !t.IsAbstract && 
+                    t => t.IsClass && !t.IsAbstract &&
                     t.GetInterfaces()
-                        .Any(i => i.IsGenericType && 
-                                  i.GetGenericTypeDefinition() == typeof(IMonitorSettings<>) && 
+                        .Any(i => i.IsGenericType &&
+                                  i.GetGenericTypeDefinition() == typeof(IMonitorSettings<>) &&
                                   i.GetGenericArguments()[0] == type));
 
-                if(settingsType != null)
+                if (settingsType != null)
                 {
                     settingsTypes.Add(type.Name, settingsType);
                 }
@@ -136,7 +137,7 @@ namespace UptimeMonitor.Core.Plugins
 
                     plugins.AddRange(discoveredPlugins);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex, $"Failed to load assembly from dll {dll}");
                 }
@@ -160,11 +161,12 @@ namespace UptimeMonitor.Core.Plugins
                 .ToList();
         }
 
-        public IDictionary<string,string> GetMonitorTypeNames()
+        public IDictionary<string, string> GetMonitorTypeNames()
         {
-            var dictionary = new Dictionary<string,string>();
+            var dictionary = new Dictionary<string, string>();
 
-            try {
+            try
+            {
                 var monitorTypes = _plugins.SelectMany(p => p.MonitorTypes);
 
                 foreach (var type in monitorTypes)
@@ -194,15 +196,15 @@ namespace UptimeMonitor.Core.Plugins
             {
                 var settingsTypes = _plugins.SelectMany(p => p.MonitorTypeSettings);
 
-                foreach(var kvp in settingsTypes)
+                foreach (var kvp in settingsTypes)
                 {
                     var properties = new List<SettingDefinition>();
 
-                    foreach(var property in kvp.Value.GetProperties())
+                    foreach (var property in kvp.Value.GetProperties())
                     {
                         var settingDefinitionAttribute = property.GetCustomAttribute<SettingDefinitionAttribute>();
 
-                        if(settingDefinitionAttribute != null)
+                        if (settingDefinitionAttribute != null)
                         {
                             object? defaultValue = null;
 
@@ -211,7 +213,7 @@ namespace UptimeMonitor.Core.Plugins
                             {
                                 defaultValue = defaultValueAttribute.Value;
                             }
-                            
+
                             properties.Add(new SettingDefinition
                             {
                                 Name = property.Name,
@@ -228,7 +230,7 @@ namespace UptimeMonitor.Core.Plugins
                     dictionary.Add(kvp.Key, properties);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogWarning(ex, "An exception occurred getting the monitor type settings");
             }

@@ -83,14 +83,16 @@ namespace UptimeMonitor.Web
                 options.HeaderName = "X-XSRF-TOKEN";
                 options.Cookie.Name = "__Host-X-XSRF-TOKEN";
                 options.Cookie.SameSite = SameSiteMode.Strict;
-                if (!builder.Environment.IsDevelopment()) {
+                if (!builder.Environment.IsDevelopment())
+                {
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 }
             });
 
             builder.Services.AddAutoMapper((config) => { }, Assembly.GetExecutingAssembly());
-            
-            builder.Services.AddDbContextFactory<MonitorDbContext>(config => {
+
+            builder.Services.AddDbContextFactory<MonitorDbContext>(config =>
+            {
                 config.UseNpgsql(builder.Configuration.GetConnectionString("MonitorDbContext"));
             });
 
@@ -148,7 +150,8 @@ namespace UptimeMonitor.Web
 
             var internalWorkerConfiguration = builder.Configuration.GetSection("InternalWorker");
             var internalWorkerEnabled = internalWorkerConfiguration.GetValue<bool>("Enabled");
-            if (internalWorkerEnabled) {
+            if (internalWorkerEnabled)
+            {
                 builder.Services.AddScoped<IWorkerService, InternalMonitorService>();
                 builder.Services.AddMonitorService();
             }

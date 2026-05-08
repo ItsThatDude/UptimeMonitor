@@ -10,7 +10,7 @@
         public int ConfigUpdateInterval { get; set; } = 60;
         public DateTime LastCheckIn { get; set; } = DateTime.UtcNow;
 
-        public bool Internal {get;set;} = false;
+        public bool Internal { get; set; } = false;
         public bool Approved { get; set; } = false;
     }
 }

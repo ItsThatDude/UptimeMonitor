@@ -86,7 +86,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
                 };
 
                 var order = 0;
-                foreach(var monitor in groupMonitors)
+                foreach (var monitor in groupMonitors)
                 {
                     group.Monitors.Add(new StatusPageMonitorGroupMonitor
                     {
@@ -123,7 +123,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
                 .Where(x => x.Slug == slug || x.Default == true)
                 .ToListAsync();
 
-            if(!statusPages.Any(x => x.Slug == slug))
+            if (!statusPages.Any(x => x.Slug == slug))
             {
                 return NotFound();
             }
@@ -198,7 +198,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
                             existingGroup.Name = group.Name;
                         }
 
-                        if(existingGroup.SortOrder != groupOrder)
+                        if (existingGroup.SortOrder != groupOrder)
                         {
                             existingGroup.SortOrder = groupOrder;
                         }
@@ -274,7 +274,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
         {
             var statusPage = await _dbContext.StatusPages.FirstOrDefaultAsync(x => x.Slug == slug);
 
-            if(statusPage == null)
+            if (statusPage == null)
             {
                 return NotFound();
             }

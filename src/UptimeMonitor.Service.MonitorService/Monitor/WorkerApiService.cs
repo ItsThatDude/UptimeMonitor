@@ -323,8 +323,8 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
                                 // AuthenticateAsync will log failures; if it fails the next attempt will still occur
                                 bool success = await AuthenticateAsync(cancellationToken);
                                 context["auth-attempted"] = true;
-                                
-                                if(!success)
+
+                                if (!success)
                                 {
                                     _logger.LogWarning("Re-authentication failed during retry {Retry}", retryNumber);
                                 }

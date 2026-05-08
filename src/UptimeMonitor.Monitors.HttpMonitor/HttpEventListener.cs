@@ -53,7 +53,7 @@ namespace UptimeMonitor.Monitors.HttpMonitor
                     if (eventData.Payload != null && eventData.PayloadNames != null)
                     {
                         var schemePayloadIndex = eventData.PayloadNames.IndexOf("scheme");
-                        if(schemePayloadIndex != -1)
+                        if (schemePayloadIndex != -1)
                             details.Scheme = eventData.Payload[schemePayloadIndex]?.ToString();
 
                         var hostPayloadIndex = eventData.PayloadNames.IndexOf("host");
@@ -149,10 +149,10 @@ namespace UptimeMonitor.Monitors.HttpMonitor
             public TimeSpan? ResponseHeaders { get; set; }
             public TimeSpan? ResponseContent { get; set; }
 
-            public TimeSpan? TimeToHeaders => 
-                (SslHandshake ?? TimeSpan.Zero) + 
-                (SocketConnect ?? TimeSpan.Zero) + 
-                (RequestHeaders ?? TimeSpan.Zero) + 
+            public TimeSpan? TimeToHeaders =>
+                (SslHandshake ?? TimeSpan.Zero) +
+                (SocketConnect ?? TimeSpan.Zero) +
+                (RequestHeaders ?? TimeSpan.Zero) +
                 (ResponseHeaders ?? TimeSpan.Zero);
         }
 

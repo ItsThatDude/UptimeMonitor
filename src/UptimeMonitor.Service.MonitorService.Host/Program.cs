@@ -17,7 +17,7 @@ namespace UptimeMonitor.Service.MonitorService
 
             ConfigureLogging(builder);
             ConfigureServices(builder);
-            
+
             var app = builder.Build();
             ConfigureMiddleware(app);
 
@@ -43,7 +43,7 @@ namespace UptimeMonitor.Service.MonitorService
             builder.Services.Configure<AuthOptions>(options =>
                 builder.Configuration.GetSection("Auth").Bind(options));
             builder.Services.AddScoped<IWorkerService, WorkerApiService>();
-            
+
             builder.Services.AddMonitorService();
 
             builder.Services.AddHealthChecks()

@@ -36,24 +36,25 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _workerService = scope.ServiceProvider.GetRequiredService<IWorkerService>();
-                
-                while(!_workerService.IsRegistered) {
+
+                while (!_workerService.IsRegistered)
+                {
                     try
                     {
                         await _workerService.WaitForRegistrationAsync(stoppingToken);
                     }
-                    catch(SocketException ex)
+                    catch (SocketException ex)
                     {
                         _logger.LogWarning(ex, "An exception occurred attempting to register/authenticate the worker: {message}", ex.Message);
                     }
                     finally
                     {
-                        if(!_workerService.IsRegistered)
+                        if (!_workerService.IsRegistered)
                         {
                             _logger.LogWarning("Failed to register worker, sleeping for 30 seconds");
                             await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
                         }
-                        else if(!_workerService.IsAuthenticated)
+                        else if (!_workerService.IsAuthenticated)
                         {
                             _logger.LogWarning("Failed to authenticate, sleeping for 30 seconds");
                             await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
@@ -61,17 +62,18 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
                     }
                 }
 
-                while(!_pluginManager.PluginsLoaded)
+                while (!_pluginManager.PluginsLoaded)
                 {
                     _logger.LogInformation("Waiting for plugins to be loaded...");
                     await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 }
 
-                try {
+                try
+                {
                     while (!stoppingToken.IsCancellationRequested)
                     {
                         var types = _pluginManager.GetMonitorTypes();
-                        
+
                         _logger.LogInformation("Fetching worker configuration...");
                         _configuration = await _workerService.GetConfigurationAsync(stoppingToken);
 
@@ -144,7 +146,7 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
                     }
 
                     // Cancellation requested
-                    foreach(var instance in _instances)
+                    foreach (var instance in _instances)
                     {
                         instance.Stop();
                         instance.Dispose();

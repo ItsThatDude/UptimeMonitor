@@ -4,7 +4,7 @@
     {
         public required string MonitorType { get; set; }
 
-        public IEnumerable<MonitorSettingsPropertyDto> Properties { get;set;} = [];
+        public IEnumerable<MonitorSettingsPropertyDto> Properties { get; set; } = [];
     }
 
     public class MonitorSettingsPropertyDto

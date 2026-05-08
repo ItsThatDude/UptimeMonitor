@@ -20,7 +20,7 @@ namespace UptimeMonitor.Web.Services
         public InternalMonitorService(IMapper mapper, IDbContextFactory<MonitorDbContext> dbContextFactory)
         {
             _mapper = mapper;
-            _dbContextFactory = dbContextFactory;    
+            _dbContextFactory = dbContextFactory;
         }
 
         public async Task<WorkerConfiguration?> GetConfigurationAsync(CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ namespace UptimeMonitor.Web.Services
             {
                 throw new Exception("Worker not found");
             }
-            
+
             config.LastCheckIn = DateTime.UtcNow;
             await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -66,7 +66,7 @@ namespace UptimeMonitor.Web.Services
                 throw new Exception("Monitor could not be found");
             }
 
-            if(tlsDetails != null)
+            if (tlsDetails != null)
             {
                 if (monitor.TlsDetails == null)
                 {
@@ -103,7 +103,7 @@ namespace UptimeMonitor.Web.Services
             }
             else
             {
-                if(monitor.TlsDetails != null)
+                if (monitor.TlsDetails != null)
                 {
                     monitor.TlsDetails = null;
                 }
@@ -114,9 +114,9 @@ namespace UptimeMonitor.Web.Services
                     .OrderByDescending(mr => mr.Timestamp)
                     .FirstOrDefaultAsync(cancellationToken);
 
-            if(lastResult != null)
+            if (lastResult != null)
             {
-                if(lastResult.IsSuccessful && !success)
+                if (lastResult.IsSuccessful && !success)
                 {
                     await dbContext.MonitorEvents.AddAsync(new MonitorEvent
                     {
@@ -126,7 +126,7 @@ namespace UptimeMonitor.Web.Services
                         EventMessage = "Monitored target has gone offline"
                     }, cancellationToken);
                 }
-                else if(!lastResult.IsSuccessful && success)
+                else if (!lastResult.IsSuccessful && success)
                 {
                     await dbContext.MonitorEvents.AddAsync(new MonitorEvent
                     {
@@ -137,9 +137,9 @@ namespace UptimeMonitor.Web.Services
                     }, cancellationToken);
                 }
 
-                if(monitor.WarningThreshold > 0 && lastResult.IsSuccessful && success)
+                if (monitor.WarningThreshold > 0 && lastResult.IsSuccessful && success)
                 {
-                    if(lastResult.ResponseTime.TotalMilliseconds <= monitor.WarningThreshold
+                    if (lastResult.ResponseTime.TotalMilliseconds <= monitor.WarningThreshold
                         && responseTime.TotalMilliseconds > monitor.WarningThreshold)
                     {
                         await dbContext.MonitorEvents.AddAsync(new MonitorEvent
@@ -171,7 +171,8 @@ namespace UptimeMonitor.Web.Services
 
         public async Task WaitForRegistrationAsync(CancellationToken cancellationToken)
         {
-            if(!IsRegistered) {
+            if (!IsRegistered)
+            {
                 using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
                 var config = await dbContext.WorkerConfigurations.FirstOrDefaultAsync(w => w.Internal == true, cancellationToken);
 

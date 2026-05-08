@@ -163,12 +163,12 @@ namespace UptimeMonitor.Web.Controllers.Api
 
             var monitor = await GetMonitorAsync(data.MonitorId);
 
-            if(monitor == null)
+            if (monitor == null)
             {
                 return NotFound();
             }
 
-            if(data.TlsDetails != null)
+            if (data.TlsDetails != null)
             {
                 if (monitor.TlsDetails == null)
                 {
@@ -205,7 +205,7 @@ namespace UptimeMonitor.Web.Controllers.Api
             }
             else
             {
-                if(monitor.TlsDetails != null)
+                if (monitor.TlsDetails != null)
                 {
                     monitor.TlsDetails = null;
                 }
@@ -216,9 +216,9 @@ namespace UptimeMonitor.Web.Controllers.Api
                     .OrderByDescending(mr => mr.Timestamp)
                     .FirstOrDefaultAsync();
 
-            if(lastResult != null)
+            if (lastResult != null)
             {
-                if(lastResult.IsSuccessful && !data.IsSuccessful)
+                if (lastResult.IsSuccessful && !data.IsSuccessful)
                 {
                     await _dbContext.MonitorEvents.AddAsync(new MonitorEvent
                     {
@@ -228,7 +228,7 @@ namespace UptimeMonitor.Web.Controllers.Api
                         EventMessage = "Monitored target has gone offline"
                     });
                 }
-                else if(!lastResult.IsSuccessful && data.IsSuccessful)
+                else if (!lastResult.IsSuccessful && data.IsSuccessful)
                 {
                     await _dbContext.MonitorEvents.AddAsync(new MonitorEvent
                     {
@@ -239,9 +239,9 @@ namespace UptimeMonitor.Web.Controllers.Api
                     });
                 }
 
-                if(monitor.WarningThreshold > 0 && lastResult.IsSuccessful && data.IsSuccessful)
+                if (monitor.WarningThreshold > 0 && lastResult.IsSuccessful && data.IsSuccessful)
                 {
-                    if(lastResult.ResponseTime.TotalMilliseconds <= monitor.WarningThreshold
+                    if (lastResult.ResponseTime.TotalMilliseconds <= monitor.WarningThreshold
                         && data.ResponseTime.TotalMilliseconds > monitor.WarningThreshold)
                     {
                         await _dbContext.MonitorEvents.AddAsync(new MonitorEvent

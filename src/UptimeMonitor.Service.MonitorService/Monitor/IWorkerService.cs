@@ -8,7 +8,7 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
     {
         bool IsRegistered { get; }
         bool IsAuthenticated { get; }
-        
+
         Task WaitForRegistrationAsync(CancellationToken cancellationToken);
         Task<WorkerConfiguration?> GetConfigurationAsync(CancellationToken cancellationToken);
         Task<List<MonitorConfigurationResponse>> GetMonitorConfigsAsync(CancellationToken cancellationToken);

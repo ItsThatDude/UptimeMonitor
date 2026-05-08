@@ -25,8 +25,8 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
         private readonly HeartbeatService _heartbeatService;
 
         public MonitorController(
-            IMapper mapper, 
-            MonitorDbContext dbContext, 
+            IMapper mapper,
+            MonitorDbContext dbContext,
             PluginManager pluginManager,
             HeartbeatService heartbeatService)
         {
@@ -170,7 +170,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
             var config = await _dbContext.MonitorConfigurations
                 .Include(m => m.TlsDetails).FirstOrDefaultAsync(m => m.Id == id);
 
-            if(config == null)
+            if (config == null)
             {
                 return NotFound();
             }
@@ -240,12 +240,12 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
         {
             var monitor = await _dbContext.MonitorConfigurations.FindAsync(id);
 
-            if(monitor == null)
+            if (monitor == null)
             {
                 return NotFound();
             }
 
-            if(monitor.Name != data.Name)
+            if (monitor.Name != data.Name)
             {
                 monitor.Name = data.Name;
             }
@@ -255,12 +255,12 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
                 monitor.Target = data.Target;
             }
 
-            if(monitor.Enabled != data.Enabled)
+            if (monitor.Enabled != data.Enabled)
             {
                 monitor.Enabled = data.Enabled;
             }
 
-            if(monitor.Interval != data.Interval)
+            if (monitor.Interval != data.Interval)
             {
                 monitor.Interval = data.Interval;
             }
@@ -291,7 +291,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
         {
             var monitor = await _dbContext.MonitorConfigurations.FindAsync(id);
 
-            if(monitor == null)
+            if (monitor == null)
             {
                 return NotFound();
             }

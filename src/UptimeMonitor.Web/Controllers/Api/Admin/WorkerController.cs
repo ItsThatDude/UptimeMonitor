@@ -90,7 +90,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
         {
             var worker = await _dbContext.WorkerConfigurations.FindAsync(id);
 
-            if(worker == null)
+            if (worker == null)
             {
                 return NotFound();
             }
@@ -109,7 +109,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
                 return NotFound();
             }
 
-            if(!string.IsNullOrWhiteSpace(data.Name) && worker.Name != data.Name)
+            if (!string.IsNullOrWhiteSpace(data.Name) && worker.Name != data.Name)
             {
                 worker.Name = data.Name;
             }
@@ -124,7 +124,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
                 worker.Location = Cryptography.HashSecret(data.Secret);
             }
 
-            if(worker.ConfigUpdateInterval != data.ConfigUpdateInterval)
+            if (worker.ConfigUpdateInterval != data.ConfigUpdateInterval)
             {
                 worker.ConfigUpdateInterval = data.ConfigUpdateInterval;
             }

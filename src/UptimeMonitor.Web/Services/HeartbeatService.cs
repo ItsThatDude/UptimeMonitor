@@ -39,10 +39,11 @@ namespace UptimeMonitor.Web.Api.Services
                     .Where(x => x.Name == worker)
                     .FirstOrDefaultAsync();
 
-                if (selectedWorker != null) {
+                if (selectedWorker != null)
+                {
                     heartbeatLookupQuery = heartbeatLookupQuery.Where(x => x.WorkerConfigurationId == selectedWorker.Id);
                 }
-            } 
+            }
             else if (location != null)
             {
                 var workerIds = await _dbContext.WorkerConfigurations

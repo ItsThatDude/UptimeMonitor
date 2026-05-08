@@ -100,7 +100,7 @@ namespace UptimeMonitor.Service.MonitorService.Monitor
 
         public void Dispose()
         {
-            if(_monitor is IDisposable disposable)
+            if (_monitor is IDisposable disposable)
             {
                 disposable.Dispose();
             }

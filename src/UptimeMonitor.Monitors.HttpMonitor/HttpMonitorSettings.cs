@@ -28,50 +28,50 @@ namespace UptimeMonitor.Monitors.HttpMonitor
     public class HttpMonitorSettings : IMonitorSettings<HttpMonitor>
     {
         [SettingDefinition(
-            displayName:"HTTP Method", 
-            dataType:SettingDataType.String, 
-            required:true, 
-            allowMultiple:false, 
-            description:"The HTTP Method used to send the request."
+            displayName: "HTTP Method",
+            dataType: SettingDataType.String,
+            required: true,
+            allowMultiple: false,
+            description: "The HTTP Method used to send the request."
         )]
         public string Method { get; set; } = "GET";
 
         [SettingDefinition(
-            displayName:"Accepted Status Codes", 
-            dataType:SettingDataType.Int, 
-            required:true, 
-            allowMultiple:true, 
-            description:"The status codes expected that indicates success."
+            displayName: "Accepted Status Codes",
+            dataType: SettingDataType.Int,
+            required: true,
+            allowMultiple: true,
+            description: "The status codes expected that indicates success."
         )]
-        [DefaultValue(new int[] {200, 301, 302})]
+        [DefaultValue(new int[] { 200, 301, 302 })]
         public int[] AcceptedStatusCodes { get; set; } = { 200, 301, 302 };
 
         [SettingDefinition(
-            displayName:"Response Time Measurement", 
-            dataType:SettingDataType.String, 
-            required:false, 
-            allowMultiple:false,
-            description:"The method used to measure response time."
+            displayName: "Response Time Measurement",
+            dataType: SettingDataType.String,
+            required: false,
+            allowMultiple: false,
+            description: "The method used to measure response time."
         )]
         [DefaultValue(nameof(ResponseTimeMeasurement.Request))]
         [JsonConverter(typeof(ResponseTimeMeasurementEnumConverter))]
         public ResponseTimeMeasurement ResponseTimeMeasurement { get; set; } = ResponseTimeMeasurement.Request;
 
         [SettingDefinition(
-            displayName:"Ignore Invalid Certificates", 
-            dataType:SettingDataType.Boolean, 
-            required:false, 
-            allowMultiple:false,
-            description:"Accept invalid certificates."
+            displayName: "Ignore Invalid Certificates",
+            dataType: SettingDataType.Boolean,
+            required: false,
+            allowMultiple: false,
+            description: "Accept invalid certificates."
         )]
         public bool IgnoreInvalidCertificates { get; set; } = false;
 
         [SettingDefinition(
-            displayName:"CA Certificate", 
-            dataType:SettingDataType.MultilineString, 
-            required:false, 
-            allowMultiple:false, 
-            description:"The CA Certificate used to validate the HTTPs Certificate."
+            displayName: "CA Certificate",
+            dataType: SettingDataType.MultilineString,
+            required: false,
+            allowMultiple: false,
+            description: "The CA Certificate used to validate the HTTPs Certificate."
         )]
         public string? CACertificate { get; set; } = null;
     }

@@ -37,7 +37,8 @@ namespace UptimeMonitor.Monitors.HttpMonitor
                 throw new Exception("Unable to parse settings JSON");
             }
 
-            if (_httpMessageHandler == null) {
+            if (_httpMessageHandler == null)
+            {
                 var sslOptions = new SslClientAuthenticationOptions
                 {
                     RemoteCertificateValidationCallback = CertificateValidationCallback
@@ -51,7 +52,8 @@ namespace UptimeMonitor.Monitors.HttpMonitor
                 };
             }
 
-            if (_httpClient == null) {
+            if (_httpClient == null)
+            {
                 _httpClient = new HttpClient(_httpMessageHandler, false);
             }
         }
@@ -81,12 +83,13 @@ namespace UptimeMonitor.Monitors.HttpMonitor
             _logger.LogDebug($"[{_configuration.Target}] Target: {_configuration.Target}");
             _logger.LogDebug($"[{_configuration.Target}] Errors: {sslPolicyErrors}");
 
-            if(certificate == null)
+            if (certificate == null)
             {
                 _logger.LogWarning($"[{_configuration.Target}] No certificate provided");
                 return false;
             }
-            else {
+            else
+            {
                 _logger.LogDebug($"[{_configuration.Target}] Effective date: {certificate?.GetEffectiveDateString()}");
                 _logger.LogDebug($"[{_configuration.Target}] Exp date: {certificate?.GetExpirationDateString()}");
                 _logger.LogDebug($"[{_configuration.Target}] Issuer: {certificate?.Issuer}");
@@ -211,7 +214,7 @@ namespace UptimeMonitor.Monitors.HttpMonitor
                         case ResponseTimeMeasurement.TimeToHeaders:
                             responseTime = listener.GetTimings().TimeToHeaders ?? stopwatch.Elapsed;
                             break;
-                        case ResponseTimeMeasurement.Internal:       
+                        case ResponseTimeMeasurement.Internal:
                             responseTime = stopwatch.Elapsed;
                             break;
                     }
@@ -241,19 +244,19 @@ namespace UptimeMonitor.Monitors.HttpMonitor
 
         public void Dispose()
         {
-            if(_certificate != null)
+            if (_certificate != null)
             {
                 _certificate.Dispose();
                 _certificate = null;
             }
 
-            if(_httpClient != null)
+            if (_httpClient != null)
             {
                 _httpClient.Dispose();
                 _httpClient = null;
             }
 
-            if(_httpMessageHandler != null)
+            if (_httpMessageHandler != null)
             {
                 _httpMessageHandler.Dispose();
                 _httpMessageHandler = null;

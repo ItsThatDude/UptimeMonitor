@@ -17,7 +17,7 @@ namespace UptimeMonitor.Monitors.HttpMonitor
             return (JsonConverter?)Activator.CreateInstance(typeof(EnumConverterDecorator), new object?[] { this, inner });
         }
 
-        sealed class EnumConverterDecorator  : JsonConverter<T>
+        sealed class EnumConverterDecorator : JsonConverter<T>
         {
             readonly DefaultFallbackStringEnumConverter<T> parent;
             readonly JsonConverter<T> inner;

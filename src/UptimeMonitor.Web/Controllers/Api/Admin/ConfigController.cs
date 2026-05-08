@@ -34,7 +34,7 @@ namespace UptimeMonitor.Web.Controllers.Api.Admin
         public async Task<ActionResult> UpdateAsync([FromBody] AdminUpdateSystemSettingsRequest request)
         {
             // If DefaultStatusPageSlug is provided, update the default status page
-            if(request.DefaultStatusPageSlug != null)
+            if (request.DefaultStatusPageSlug != null)
             {
                 if (string.IsNullOrWhiteSpace(request.DefaultStatusPageSlug))
                 {

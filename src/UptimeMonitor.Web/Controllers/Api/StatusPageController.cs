@@ -47,14 +47,14 @@ namespace UptimeMonitor.Web.Controllers.Api
         [EndpointName("GetHeartbeats")]
         public async Task<ActionResult<IEnumerable<GetMonitorHeartbeatsResponse>>> GetHeartbeatsAsync(
             string slug,
-            [FromQuery] string? location = null, 
-            [FromQuery] string? worker = null, 
+            [FromQuery] string? location = null,
+            [FromQuery] string? worker = null,
             [FromQuery] string? timeRange = null)
         {
             var interval = TimeSpan.FromMinutes(1);
             var limit = 61;
 
-            if(timeRange != null && timeRange == "24h")
+            if (timeRange != null && timeRange == "24h")
             {
                 interval = TimeSpan.FromMinutes(30);
                 limit = 49;
@@ -87,7 +87,7 @@ namespace UptimeMonitor.Web.Controllers.Api
 
             var query = _dbContext.WorkerConfigurations.Select(w => w.Location);
 
-            if(search != null)
+            if (search != null)
             {
                 query = query.Where(location => location.ToLower().Contains(search.ToLower()));
             }
