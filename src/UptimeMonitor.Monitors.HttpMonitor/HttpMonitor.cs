@@ -53,7 +53,7 @@ namespace UptimeMonitor.Monitors.HttpMonitor
                     UseProxy = _settings.UseProxy
                 };
 
-                if(!string.IsNullOrWhiteSpace(_settings.ProxyServer))
+                if (!string.IsNullOrWhiteSpace(_settings.ProxyServer))
                 {
                     handler.Proxy = new HttpMonitorProxy(new Uri(_settings.ProxyServer));
                 }
