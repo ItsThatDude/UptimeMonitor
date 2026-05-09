@@ -74,5 +74,23 @@ namespace UptimeMonitor.Monitors.HttpMonitor
             description: "The CA Certificate used to validate the HTTPs Certificate."
         )]
         public string? CACertificate { get; set; } = null;
+
+        [SettingDefinition(
+            displayName: "Use Proxy",
+            dataType: SettingDataType.Boolean,
+            required: false,
+            allowMultiple: false,
+            description: "Use a proxy server"
+        )]
+        public bool UseProxy { get; set; } = false;
+
+        [SettingDefinition(
+            displayName: "Proxy",
+            dataType: SettingDataType.String,
+            required: false,
+            allowMultiple: false,
+            description: "Proxy server address"
+        )]
+        public string? ProxyServer { get; set; } = null;
     }
 }

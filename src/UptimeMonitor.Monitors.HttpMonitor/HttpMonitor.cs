@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -44,12 +45,20 @@ namespace UptimeMonitor.Monitors.HttpMonitor
                     RemoteCertificateValidationCallback = CertificateValidationCallback
                 };
 
-                _httpMessageHandler = new SocketsHttpHandler
+                var handler = new SocketsHttpHandler
                 {
                     AllowAutoRedirect = false,
                     SslOptions = sslOptions,
-                    PooledConnectionLifetime = TimeSpan.FromMinutes(5)
+                    PooledConnectionLifetime = TimeSpan.FromMinutes(5),
+                    UseProxy = _settings.UseProxy
                 };
+
+                if(!string.IsNullOrWhiteSpace(_settings.ProxyServer))
+                {
+                    handler.Proxy = new HttpMonitorProxy(new Uri(_settings.ProxyServer));
+                }
+
+                _httpMessageHandler = handler;
             }
 
             if (_httpClient == null)
