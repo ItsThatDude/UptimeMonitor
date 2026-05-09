@@ -1,5 +1,5 @@
-<div class="row pb-md-1">
-    <div class="col-md-12 col-lg-6 pb-1 pb-lg-0">
+<div class="row pb-lg-1">
+    <div class="col-lg-12 col-xl-6 pb-1 pb-xl-0">
         <div class="card-group">
             <div class="card">
                 <div class="card-body">
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12 col-lg-4">
+    <div class="col-lg-12 col-xl-4">
         <div class="card-group">
             <div class="card">
                 <div class="card-body">
@@ -51,7 +51,7 @@
     </div>
 </div>
 <div class="row py-1">
-    <div class="col-md-5 pb-2 pb-md-0" style="overflow:auto">
+    <div class="col-xl-5 pb-2 pb-xl-0" style="overflow:auto">
         <div class="card">
             <h4>Monitors</h4>
             <div class="table-responsive">
@@ -60,7 +60,7 @@
                         <tr>
                             <th class="col-4">Monitor</th>
                             <th class="col-1">Uptime</th>
-                            <th class="col-7 d-none d-md-table-cell">Response Time</th>
+                            <th class="col-7 d-none d-lg-table-cell">Response Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,7 +69,7 @@
                             <td>{{monitor.name}}</td>
                             <td>@if(heartbeats[monitor.id]){<span class="badge rounded-pill bg-primary ms-2"
                                     style="font-size: 10px">{{heartbeats[monitor.id].uptime}}%</span>}</td>
-                            <td class="d-none d-md-table-cell">
+                            <td class="d-none d-lg-table-cell">
                                 @if(heartbeats[monitor.id]) {
                                 <div class="chart-container" style="display: block">
                                     <canvas baseChart type="bar" [data]="getChartData(monitor.id)"
@@ -79,7 +79,7 @@
                             </td>
                         </tr>
                         @if(heartbeats[monitor.id]) {
-                        <tr class="d-md-none">
+                        <tr class="d-lg-none">
                             <td colspan="3">
                                 <div class="chart-container" style="display: block">
                                     <canvas baseChart type="bar" [data]="getChartData(monitor.id)"
@@ -98,7 +98,7 @@
         </div>
     </div>
 
-    <div class="col-md-7">
+    <div class="col-xl-7">
         <div class="card">
             <h4>Events</h4>
             <div class="table-responsive">
