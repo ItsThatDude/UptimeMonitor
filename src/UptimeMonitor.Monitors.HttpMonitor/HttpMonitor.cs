@@ -49,7 +49,7 @@ namespace UptimeMonitor.Monitors.HttpMonitor
                 {
                     AllowAutoRedirect = false,
                     SslOptions = sslOptions,
-                    PooledConnectionLifetime = TimeSpan.FromMinutes(5),
+                    //PooledConnectionLifetime = TimeSpan.FromMinutes(5),
                     UseProxy = _settings.UseProxy
                 };
 
