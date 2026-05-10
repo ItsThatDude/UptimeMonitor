@@ -180,6 +180,10 @@ export class DashboardComponent implements OnInit {
             }
         }
 
+        if(options.bar && options.bar.datasets) {
+            options.bar.datasets.barThickness = 4;
+        }
+
         return options;
     }
 
